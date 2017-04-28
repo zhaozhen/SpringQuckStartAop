@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="customerService" class="com.aop2.CustomerService">
+        <property name="name" value="Shiyanlou"/>
+        <property name="url" value="http://shiyanlou.com"/>
+    </bean>
+
+    <bean id="hijackBeforeMethodBean" class="com.aop2.advice.HijackBeforeMethod"/>
+
+    <bean id="hijackAfterMethodBean" class="com.aop2.advice.HijackAfterMethod"/>
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!--//interceptorNames 定义想用哪个 class ( advice )劫持 target -->
+    <!--<bean id="customerServiceProxy" class="org.springframewaop2.aop.framework.ProxyFactoryBean">-->
+    <!--<property name="target" ref="customerService"/>-->
+    <!--<property name="interceptorNames">-->
+    <!--<list>-->
+    <!--<value>hijackBeforeMethodBean</value>-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--</bean>-->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!--//和上一个方法类似主要是后置方法-->
+    <!--<bean id="customerServiceProxy" class="org.springframewaop2.aop.framework.ProxyFactoryBean">-->
+    <!--<property name="target" ref="customerService"/>-->
+    <!--<property name="interceptorNames">-->
+    <!--<list>-->
+    <!--<value>hijackAfterMethodBean</value>-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--</bean>-->
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!--    //下面是选择性执行advice的方法，要有三个1，代理，2，切点，3:advistor,&#45;&#45;&#45;&#45;advistor要有切点和advice-->
+    <!--//经典的切点和切面的方法-->
+    <!--//spring aop主要还是用代理模式，判断-->
+    <!--<bean id="customerServiceProxy" class="org.springframewaop2.aop.framework.ProxyFactoryBean">-->
+    <!--<property name="target" ref="customerService"/>-->
+    <!--<property name="interceptorNames">-->
+    <!--<list>-->
+    <!--<value>customerAdvisor</value>-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean id="customerPointcut" class="org.springframewaop2.aop.support.NameMatchMethodPointcut">-->
+    <!--<property name="mappedName" value="printName"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="customerAdvisor" class="org.springframewaop2.aop.support.DefaultPointcutAdvisor">-->
+    <!--<property name="pointcut" ref="customerPointcut"/>-->
+    <!--<property name="advice" ref="hijackAfterMethodBean"/>-->
+    <!--</bean>-->
+
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!--使用正则表达式进行动态切入，-->
+    <!--<bean id="customerAdvisor" class="org.springframewaop2.aop.support.RegexpMethodPointcutAdvisor">-->
+    <!--<property name="patterns">-->
+    <!--<list>-->
+    <!--<value>.*URL.*</value>-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--<property name="advice" ref="hijackBeforeMethodBean" />-->
+    <!--</bean>-->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!--利用 BeanNameAutoProxyCreator 自动创建 proxy-->
+    <!--<bean id="customerServiceProxy"-->
+    <!--class="org.springframewaop2.aop.framework.ProxyFactoryBean">-->
+    <!--<property name="target" ref="customerService"/>-->
+    <!--<property name="interceptorNames">-->
+    <!--<list>-->
+    <!--<value>customerAdvisor</value>-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean id="customerAdvisor" class="org.springframewaop2.aop.support.NameMatchMethodPointcutAdvisor">-->
+    <!--<property name="mappedName" value="printName"/>-->
+    <!--<property name="advice" ref="hijackAfterMethodBean"/>-->
+    <!--</bean>-->
+
+    <!--<bean class="org.springframewaop2.aop.framework.autoproxy.BeanNameAutoProxyCreator">-->
+    <!--<property name="beanNames">-->
+    <!--<list>-->
+    <!--<value>*Service</value>-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--<property name="interceptorNames">-->
+    <!--<list>-->
+    <!--<value>customerAdvisor</value>-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--</bean>-->
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- 利用 DefaultAdvisorAutoProxyCreator 创建 Proxy-->
+
+
+    <!--<bean id="customerAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">-->
+    <!--<property name="mappedName" value="printName"/>-->
+    <!--<property name="advice" ref="hijackAfterMethodBean"/>-->
+    <!--</bean>-->
+
+    <!--<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>-->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!--使用aspectJ进行注入，使用切面-->
+    <aop:aspectj-autoproxy/>
+    <bean id="customerBo" class="com.aop.AspectJ.CustomerBo"/>
+    <bean id="logAspect" class="com.aop.AspectJ.LoggingAspect" />
+
+</beans>
